@@ -1,0 +1,26 @@
+
+name: Aria2 Build x64 
+
+on: 
+  release:
+    types: [published]
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: build arai2c_x64.exe
+      run: |
+        curl -L -o Dockerfile.mingw "https://raw.githubusercontent.com/YuansuZhouqibiao/aria2/master/Dockerfile.mingw"
+        sudo docker build -t aria2-mingw - < Dockerfile.mingw
+        id=$(sudo docker create aria2-mingw)
+        sudo docker cp $id:/aria2/src/aria2c.exe ./aria2c_x64.exe
+    - name: Upload to release
+      uses: JasonEtco/upload-to-release@master
+      with:
+        args: aria2c_x64.exe
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
