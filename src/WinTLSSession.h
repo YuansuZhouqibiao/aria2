@@ -38,6 +38,7 @@
 
 #include <vector>
 
+#include <array>
 #include "common.h"
 #include "TLSSession.h"
 #include "WinTLSContext.h"
